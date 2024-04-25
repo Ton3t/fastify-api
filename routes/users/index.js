@@ -39,6 +39,8 @@ module.exports = async function (fastify, opts) {
     }
   });
 
+  // insertar usuarios
+
   fastify.post("/", async function (request, reply) {
     try {
       const email = await prisma.user.findUnique({
@@ -57,6 +59,61 @@ module.exports = async function (fastify, opts) {
 
       
       reply.status(200).send(newUser);
-    } catch (error) {}
+    } catch (error) {
+      reply.status(500).send({ errorMessage: "error en el servidor", error });
+    }
   });
+
+  // eliminar usuarios
+
+  fastify.delete("/:id", async function (req, reply) {
+    try {
+      const user = await prisma.user.findUnique({
+        where: {
+          id: parseInt(req.params.id),
+        },
+      });
+
+      if (!user) {
+        return reply.status(400).send("No hay usuarios");
+      }
+
+      await prisma.user.delete({
+        where: {
+          id: parseInt(req.params.id),
+        },
+      });
+
+      reply.status(200).send("Usuario eliminado");
+    } catch (error) {
+      reply.status(500).send({ errorMessage: "error en el servidor", error });
+    }
+  })
+
+  // modificar usuario
+
+  fastify.put("/:id", async (req, reply) => {
+    try {
+      const user = await prisma.user.findUnique({
+        where: {
+          id: parseInt(req.params.id),
+        },
+      });
+
+      if (!user) {
+        return reply.status(400).send("No hay usuarios");
+      }
+
+      const userUpdate = await prisma.user.update({
+        where: {
+          id: parseInt(req.params.id),
+        },
+        data: req.body,
+      });
+
+      reply.status(200).send(userUpdate);
+    } catch (error) {
+      reply.status(500).send({ errorMessage: "error en el servidor", error });
+    }
+  })
 };
