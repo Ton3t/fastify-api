@@ -2,7 +2,7 @@
 
 ## Descripción
 
-API REST báscia con fines educativos
+API REST básica con fines educativos
 
 ## Instrucciones básicas
 
