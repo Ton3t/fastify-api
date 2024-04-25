@@ -3,8 +3,7 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 module.exports = async function (fastify, opts) {
-
-    // todos los usuarios
+  // todos los usuarios
   fastify.get("/", async function (request, reply) {
     try {
       const users = await prisma.user.findMany();
@@ -45,19 +44,20 @@ module.exports = async function (fastify, opts) {
     try {
       const email = await prisma.user.findUnique({
         where: {
-          email: request.body.email
-        }
-      })
+          email: request.body.email,
+        },
+      });
 
-      if(email) {
-        return reply.status(400).send({errorMessage: "El email ya está registrado."})
+      if (email) {
+        return reply
+          .status(400)
+          .send({ errorMessage: "El email ya está registrado." });
       }
 
       const newUser = await prisma.user.createMany({
         data: request.body,
       });
 
-      
       reply.status(200).send(newUser);
     } catch (error) {
       reply.status(500).send({ errorMessage: "error en el servidor", error });
@@ -88,7 +88,7 @@ module.exports = async function (fastify, opts) {
     } catch (error) {
       reply.status(500).send({ errorMessage: "error en el servidor", error });
     }
-  })
+  });
 
   // modificar usuario
 
@@ -115,5 +115,5 @@ module.exports = async function (fastify, opts) {
     } catch (error) {
       reply.status(500).send({ errorMessage: "error en el servidor", error });
     }
-  })
+  });
 };
