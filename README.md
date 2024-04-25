@@ -25,8 +25,10 @@ Para comenzar a trabajar con este proyecto, sigue estos pasos:
 - Node.js
 
 - Fastify
+    ```bash
+    fastify generate api 
 
 - Prisma
     ```bash
     npm install prisma -D
-    fastify generate api 
+    
