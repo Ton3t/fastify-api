@@ -23,6 +23,8 @@ Para comenzar a trabajar con este proyecto, sigue estos pasos:
 ## Tecnologías y Bibliotecas
 
 - Node.js
+    ```bash
+    npm init
 
 - Fastify
     ```bash
