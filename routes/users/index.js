@@ -7,11 +7,9 @@ module.exports = async function (fastify, opts) {
   fastify.get("/", async function (request, reply) {
     try {
       const users = await prisma.user.findMany();
-
       if (!users || users.length === 0) {
         return reply.status(200).send("No hay usuarios");
       }
-
       reply.status(200).send(users);
     } catch (error) {
       reply.status(500).send({ errorMessage: "error en el servidor", error });
@@ -68,23 +66,23 @@ module.exports = async function (fastify, opts) {
 
   fastify.delete("/:id", async function (req, reply) {
     try {
-      const user = await prisma.user.findUnique({
+      const userId = await prisma.user.findUnique({
         where: {
           id: parseInt(req.params.id),
         },
       });
 
-      if (!user) {
+      if (!userId) {
         return reply.status(400).send("No hay usuarios");
       }
 
-      await prisma.user.delete({
+      const userDelete = await prisma.user.delete({
         where: {
-          id: parseInt(req.params.id),
+          id: userId,
         },
       });
 
-      reply.status(200).send("Usuario eliminado");
+      reply.status(200).send(userDelete);
     } catch (error) {
       reply.status(500).send({ errorMessage: "error en el servidor", error });
     }
@@ -94,19 +92,19 @@ module.exports = async function (fastify, opts) {
 
   fastify.put("/:id", async (req, reply) => {
     try {
-      const user = await prisma.user.findUnique({
+      const userId = await prisma.user.findUnique({
         where: {
           id: parseInt(req.params.id),
         },
       });
 
-      if (!user) {
+      if (!userId) {
         return reply.status(400).send("No hay usuarios");
       }
 
       const userUpdate = await prisma.user.update({
         where: {
-          id: parseInt(req.params.id),
+          id: userId,
         },
         data: req.body,
       });
