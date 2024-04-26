@@ -13,7 +13,7 @@ module.exports = async function (fastify, opts) {
       }
       reply.status(200).send(posts);
     } catch (error) {
-      reply.status(400).send({ errorMessage: "Error en el servidor", error });
+      reply.status(500).send({ errorMessage: "Error en el servidor", error });
     }
   });
 
@@ -27,7 +27,11 @@ module.exports = async function (fastify, opts) {
       });
 
       if (!postId) {
-        return reply.status(400).send("No existe el Post con ese id");
+        return reply
+          .status(400)
+          .send(
+            "No existe el Post con ese id. Porfavor si tiene algún problema contacte con algún programador."
+          );
       }
 
       reply.status(200).send(postId);
