@@ -27,7 +27,7 @@ module.exports = async function (fastify, opts) {
       });
 
       if (!user) {
-        return reply.status(400).send("No hay usuarios");
+        return reply.status(400).send("No existe el id. Porfavor contacte con un programador.");
       }
 
       reply.status(200).send(user);
