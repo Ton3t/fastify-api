@@ -14,11 +14,13 @@ datasource db {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  email    String  @unique
-  password String
-  name     String?
-  posts    Post[]
+  id         Int     @id @default(autoincrement())
+  email      String  @unique
+  password   String
+  name       String?
+  imgAvatar  String
+  imgPortada String
+  posts      Post[]
 }
 
 model Post {
@@ -27,6 +29,13 @@ model Post {
   content   String?
   published Boolean  @default(false)
   createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
+  files     File[]  
+}
+
+model File {
+  id     Int   @id @default(autoincrement())
+  Post   Post? @relation(fields: [postId], references: [id])
+  postId Int?
 }
