@@ -28,8 +28,8 @@ Para comenzar a trabajar con este proyecto, sigue estos pasos:
 
 - *Fastify*
     ```bash
-    npm install fastify
-    fastify generate api 
+    npm install --global fastify-cli
+    fastify generate nameProject
 
 - *Prisma*
     ```bash
