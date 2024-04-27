@@ -27,7 +27,9 @@ module.exports = async function (fastify, opts) {
       });
 
       if (!user) {
-        return reply.status(400).send("No existe el id. Porfavor contacte con un programador.");
+        return reply
+          .status(400)
+          .send("No existe el id. Porfavor contacte con un programador.");
       }
 
       reply.status(200).send(user);
@@ -64,26 +66,37 @@ module.exports = async function (fastify, opts) {
 
   // eliminar usuarios
 
-  fastify.delete("/:id", async function (req, reply) {
+  fastify.delete("/:id", async function (request, reply) {
+    const userId = request.params.id;
+
+    if (!userId) {
+      return reply.status(400).send({ errorMessage: "No existe el id." });
+    }
+
     try {
-      const userId = await prisma.user.findUnique({
+      const user = await prisma.user.findUnique({
         where: {
-          id: parseInt(req.params.id),
+          id: parseInt(userId, 10),
         },
       });
 
-      if (!userId) {
-        return reply.status(400).send("No hay usuarios");
+      if (!user?.id) {
+        return reply
+          .status(404)
+          .send({ errorMessage: "No se encuentra este usuario." });
       }
 
-      const userDelete = await prisma.user.delete({
+      
+
+      const deletedUser = await prisma.user.delete({
         where: {
-          id: userId,
+          id: parseInt(userId, 10),
         },
       });
 
-      reply.status(200).send(userDelete);
+      reply.status(200).send({ user: deletedUser });
     } catch (error) {
+      console.log(error);
       reply.status(500).send({ errorMessage: "error en el servidor", error });
     }
   });
