@@ -14,11 +14,11 @@ test('example is loaded', async (t) => {
 })
 
 // inject callback style:
-//
+
 // test('example is loaded', (t) => {
 //   t.plan(2)
 //   const app = await build(t)
-//
+
 //   app.inject({
 //     url: '/example'
 //   }, (err, res) => {
