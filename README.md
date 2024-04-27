@@ -22,16 +22,16 @@ Para comenzar a trabajar con este proyecto, sigue estos pasos:
 
 ## Tecnologías y Bibliotecas
 
-- Node.js
+- *Node.js*
     ```bash
     npm init
 
-- Fastify
+- *Fastify*
     ```bash
     npm install fastify
     fastify generate api 
 
-- Prisma
+- *Prisma*
     ```bash
     npm install prisma -D
     
