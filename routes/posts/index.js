@@ -11,6 +11,8 @@ module.exports = async function (fastify, opts) {
       if (!posts || posts.length === 0) {
         return reply.status(400).send("No hay Posts.");
       }
+
+      console.log(posts);
       reply.status(200).send(posts);
     } catch (error) {
       reply.status(500).send({ errorMessage: "Error en el servidor", error });
@@ -47,7 +49,7 @@ module.exports = async function (fastify, opts) {
         data: request.body,
       });
 
-      reply.status(200).send(newPost);
+      reply.status(200).send({ post: newPost });
     } catch (error) {
       reply.status(500).send({ errorMessage: "Error del servidor", error });
     }
@@ -55,24 +57,30 @@ module.exports = async function (fastify, opts) {
 
   // eliminar un post
   fastify.delete("/:id", async function (request, reply) {
+    const postId = request.params.id;
+
+    if (!postId) {
+      return reply.status(400).send({ errorMessage: "No existes el id." });
+    }
+
     try {
-      const postId = await prisma.post.findUnique({
+      const post = await prisma.post.findUnique({
         where: {
-          id: parseInt(request.params.id),
+          id: parseInt(postId, 10),
         },
       });
 
-      if (!postId) {
-        return reply.status(400).send("No existe el Post con ese id");
+      if (!post?.id) {
+        return reply.status(404).send({ errorMessage: "No existe el Post" });
       }
 
-      const postDelete = await prisma.post.delete({
+      const deletedPost = await prisma.post.delete({
         where: {
-          id: postId,
+          id: parseInt(postId, 10),
         },
       });
 
-      reply.status(200).send(postDelete);
+      reply.status(200).send({ post: deletedPost });
     } catch (error) {
       reply.status(500).send({ errorMessage: "Error del servidor", error });
     }
@@ -88,7 +96,9 @@ module.exports = async function (fastify, opts) {
       });
 
       if (!postId) {
-        return reply.status(400).send("No existe el Post con ese id");
+        return reply
+          .status(400)
+          .send({ errorMessage: "No existe el Post con ese id" });
       }
 
       const postUpdate = await prisma.post.update({
