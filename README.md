@@ -2,7 +2,7 @@
 
 ## Descripción
 
-API REST básica con fines educativos
+API REST sencilla para registrar usuarios y compartir post de los mismos.
 
 ## Instrucciones básicas
 
